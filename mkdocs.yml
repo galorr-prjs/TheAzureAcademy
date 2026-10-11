@@ -1,0 +1,10 @@
+site_name: The Azure Academy
+theme: 
+  name: material
+  name: material
+  palette:
+    primary: 'blue'
+    accent: 'light blue'
+  font:
+    text: Roboto
+    code: Roboto Mono
