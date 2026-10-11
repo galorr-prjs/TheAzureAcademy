@@ -8,3 +8,8 @@ theme:
   font:
     text: Roboto
     code: Roboto Mono
+nav: 
+  - Home: index.md
+  - Azure Fundamentals:
+    - What is cloud computing?: azure-fundamentals/what-is-cloud-computing.md
+     
