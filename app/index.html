@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Azure Academy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark"></span>azure/academy</div>
+    <nav class="nav">
+      <a href="index.html" class="active">map</a>
+      <a href="#">labs</a>
+      <a href="#">exams</a>
+      <a href="#">log</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Your cloud,<br>mapped.</h1>
+        <p>Every lesson is a resource you deploy. Finish them all and the whole Azure architecture is yours.</p>
+        <button id="continue-btn" class="btn btn-primary">Continue</button>
+      </div>
+      <div class="stats" id="stats"></div>
+    </section>
+
+    <div class="layout">
+      <div class="layout-main">
+        <section id="main-path"></section>
+        <div class="groups" id="other-paths"></div>
+      </div>
+      <aside class="log" id="log"></aside>
+    </div>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
