@@ -2,7 +2,7 @@
 
 An interactive learning platform for Azure, built from scratch and hosted on Azure. Lessons are laid out like an architecture diagram: every lesson is a resource you "deploy", and finishing a path completes the whole architecture.
 
-**Live site:** [YOUR-LIVE-URL](YOUR-LIVE-URL)
+**Live site:** [TheAzureAcademy](https://victorious-coast-0e2e4d00f.1.azurestaticapps.net)
 
 ![Azure Academy dashboard](screenshots/dashboard.png)
 
@@ -69,4 +69,4 @@ docs/               early MkDocs lesson drafts (not published)
 
 ## Author
 
-Built by [YOUR NAME](https://github.com/galorr-prjs).
+Built by [Gal Orr](https://github.com/galorr-prjs).
