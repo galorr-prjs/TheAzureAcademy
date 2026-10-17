@@ -4,7 +4,7 @@ An interactive learning platform for Azure, built from scratch and hosted on Azu
 
 **Live site:** [TheAzureAcademy](https://victorious-coast-0e2e4d00f.1.azurestaticapps.net)
 
-![Azure Academy dashboard](screenshots/dashboard.png)
+![Azure Academy dashboard](screenshots/Dashboard.png)
 
 ## Features
 
