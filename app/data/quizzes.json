@@ -1,4 +1,35 @@
-{
+{  "what-is-cloud-computing": [
+    {
+      "question": "Which statement best describes cloud computing?",
+      "options": ["Renting computing resources over the internet", "Buying servers and installing them in your office", "A type of web browser", "Storing files only on your own laptop"],
+      "answer": 0,
+      "explanation": "Cloud computing means using someone else's computing resources, such as servers, storage and software, over the internet instead of owning them."
+    },
+    {
+      "question": "Which pricing idea describes the cloud?",
+      "options": ["Pay a large fee upfront for every server", "Pay only for the resources you use", "Pay one fixed fee per year, whatever you use", "Everything is free"],
+      "answer": 1,
+      "explanation": "Cloud services are usually consumption-based: you pay for what you use instead of buying hardware upfront."
+    },
+    {
+      "question": "What does elasticity mean in the cloud?",
+      "options": ["Resources can scale up or down to match demand", "Servers never need updates", "Apps can run in only one location", "Hardware lasts longer"],
+      "answer": 0,
+      "explanation": "Elasticity means you can add or remove resources quickly as demand changes, so you are not stuck with too little or too much capacity."
+    },
+    {
+      "question": "When you use Azure, who owns and maintains the physical datacenters?",
+      "options": ["You", "Your internet provider", "Microsoft", "Your customers"],
+      "answer": 2,
+      "explanation": "Microsoft builds and runs the datacenters, so you do not need to buy or maintain physical servers."
+    },
+    {
+      "question": "Why does global reach matter for cloud apps?",
+      "options": ["It makes lessons shorter", "It removes the need for security", "It stops all outages completely", "It lets you place apps close to users around the world"],
+      "answer": 3,
+      "explanation": "Azure has datacenters in many regions, so you can run your app near your users, which usually means faster responses."
+    }
+  ],
   "service-models": [
     {
       "question": "Which service model gives you the most control over the operating system?",

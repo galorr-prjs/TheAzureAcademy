@@ -5,9 +5,25 @@
       "title": "Azure Fundamentals",
       "exam": "AZ-900",
       "lessons": [
-        { "id": "what-is-cloud-computing", "title": "Cloud basics", "minutes": 6, "xp": 50 },
-                {
-          "id": "service-models", "title": "Service models", "minutes": 8, "xp": 60,
+        {
+          "id": "what-is-cloud-computing",
+          "title": "Cloud basics",
+          "minutes": 6,
+          "xp": 50,
+          "lead": "Cloud computing means renting computing power, storage and software over the internet instead of buying and running your own hardware. You use what you need, and the provider looks after the physical machines.",
+          "cards": [
+            { "tag": "Scale", "title": "Elasticity", "manage": "grow or shrink in minutes", "example": "Virtual Machine Scale Sets", "color": "#1473E6" },
+            { "tag": "Cost", "title": "Pay as you go", "manage": "pay only for what you use", "example": "Azure Cost Management", "color": "#8E5CF0" },
+            { "tag": "Reach", "title": "Global reach", "manage": "deploy close to your users", "example": "Azure regions", "color": "#12A150" }
+          ],
+          "analogy": "Cloud computing is like getting electricity from the grid: you use what you need, pay for what you use, and never run a power station yourself.",
+          "lab": { "id": "tour-the-portal", "text": "Open the Azure portal, click the search bar at the top, and search for \"Virtual machines\" to see how Azure organizes its services." }
+        },
+        {
+          "id": "service-models",
+          "title": "Service models",
+          "minutes": 8,
+          "xp": 60,
           "lead": "Every cloud service sits somewhere on a spectrum: how much you manage yourself, and how much Azure manages for you. Know where a service sits and you know what you are responsible for.",
           "cards": [
             { "tag": "IaaS", "title": "Infrastructure", "manage": "you manage: OS, runtime, apps", "example": "Azure Virtual Machines", "color": "#1473E6" },
