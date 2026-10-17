@@ -1,0 +1,34 @@
+{
+  "service-models": [
+    {
+      "question": "Which service model gives you the most control over the operating system?",
+      "options": ["SaaS (Software as a service)", "PaaS (Platform as a service)", "IaaS (Infrastructure as a service)", "Serverless"],
+      "answer": 2,
+      "explanation": "With IaaS, such as Azure Virtual Machines, you choose and manage the operating system yourself. With PaaS and SaaS, Azure takes that job over."
+    },
+    {
+      "question": "Azure App Service is an example of which service model?",
+      "options": ["IaaS", "PaaS", "SaaS", "On-premises"],
+      "answer": 1,
+      "explanation": "App Service runs your web app on a platform that Azure manages. You only manage the app and its data."
+    },
+    {
+      "question": "Microsoft 365 is delivered as which service model?",
+      "options": ["SaaS", "IaaS", "PaaS", "Hybrid"],
+      "answer": 0,
+      "explanation": "Microsoft 365 is finished software you use through a browser or app. The provider manages everything underneath."
+    },
+    {
+      "question": "In the housing analogy, which model is like booking a hotel room?",
+      "options": ["IaaS", "SaaS", "PaaS", "Serverless"],
+      "answer": 1,
+      "explanation": "A hotel room is ready to use and the hotel handles everything else, just like SaaS."
+    },
+    {
+      "question": "Who is responsible for patching the operating system on an Azure virtual machine?",
+      "options": ["Microsoft, always", "You, the customer", "The end users", "Nobody"],
+      "answer": 1,
+      "explanation": "A virtual machine is IaaS, so keeping the operating system updated is your job. This is part of the shared responsibility model."
+    }
+  ]
+}

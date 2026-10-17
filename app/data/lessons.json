@@ -6,7 +6,17 @@
       "exam": "AZ-900",
       "lessons": [
         { "id": "what-is-cloud-computing", "title": "Cloud basics", "minutes": 6, "xp": 50 },
-        { "id": "service-models", "title": "Service models", "minutes": 8, "xp": 60 },
+                {
+          "id": "service-models", "title": "Service models", "minutes": 8, "xp": 60,
+          "lead": "Every cloud service sits somewhere on a spectrum: how much you manage yourself, and how much Azure manages for you. Know where a service sits and you know what you are responsible for.",
+          "cards": [
+            { "tag": "IaaS", "title": "Infrastructure", "manage": "you manage: OS, runtime, apps", "example": "Azure Virtual Machines", "color": "#1473E6" },
+            { "tag": "PaaS", "title": "Platform", "manage": "you manage: app and data only", "example": "Azure App Service", "color": "#8E5CF0" },
+            { "tag": "SaaS", "title": "Software", "manage": "you manage: just your use of it", "example": "Microsoft 365", "color": "#12A150" }
+          ],
+          "analogy": "IaaS is renting an empty plot, PaaS is a furnished flat, and SaaS is a hotel room.",
+          "lab": { "id": "open-the-portal", "text": "Open the Azure portal and find where Virtual Machines and App Service appear in the service list." }
+        },
         { "id": "azure-regions", "title": "Azure regions", "minutes": 7, "xp": 50 },
         { "id": "entra-id", "title": "Entra ID", "minutes": 9, "xp": 60 },
         { "id": "practice-exam", "title": "Practice exam", "minutes": null, "xp": 150 }

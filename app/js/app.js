@@ -1,16 +1,4 @@
-// Temporary demo progress. Step 4 will replace this with real saved progress.
-const state = {
-  completed: ["what-is-cloud-computing"],
-  xp: 240,
-  streak: 3,
-  quizAverage: 80,
-  log: [
-    { time: "TODAY 10:42", action: "Completed", text: "What is cloud computing?", xp: "+50 XP" },
-    { time: "TODAY 10:31", action: "Started", text: "Cloud service models" },
-    { time: "YESTERDAY", action: "Quiz passed", text: "Cloud concepts, 80%" },
-    { time: "2 DAYS AGO", action: "Streak started", text: "Day 1" }
-  ]
-};
+const state = loadProgress();
 
 async function init() {
   const response = await fetch("data/lessons.json");
@@ -22,10 +10,11 @@ async function init() {
 }
 
 function renderStats() {
+  const average = quizAverage(state);
   const items = [
-    ["STREAK", state.streak + "d"],
+    ["STREAK", currentStreak(state) + "d"],
     ["XP", state.xp],
-    ["QUIZ AVG", state.quizAverage + "%"]
+    ["QUIZ AVG", average === null ? "–" : average + "%"]
   ];
   document.getElementById("stats").innerHTML = items
     .map(([label, value]) => `<div class="stat"><div class="stat-label">${label}</div><div class="stat-value">${value}</div></div>`)
@@ -44,7 +33,7 @@ function renderMainPath(path) {
     const link = index < path.lessons.length - 1
       ? `<div class="link ${done || isCurrent ? "" : "todo"}"></div>`
       : "";
-    return `<div class="node ${status}"><span class="chip">${label}</span><div class="node-title">${lesson.title}</div><div class="node-meta">${meta}</div></div>${link}`;
+        return `<a class="node ${status}" href="lesson.html?id=${lesson.id}"><span class="chip">${label}</span><div class="node-title">${lesson.title}</div><div class="node-meta">${meta}</div></a>${link}`;
   });
 
   document.getElementById("main-path").innerHTML =
@@ -52,7 +41,7 @@ function renderMainPath(path) {
 
   const button = document.getElementById("continue-btn");
   button.textContent = current ? `Continue: ${current.title}` : "Path complete";
-  // Step 3 will link this button to the lesson page.
+  button.onclick = () => { if (current) location.href = "lesson.html?id=" + current.id; };
 }
 
 function renderOtherPaths(paths) {
@@ -62,9 +51,11 @@ function renderOtherPaths(paths) {
 }
 
 function renderLog() {
-  const items = state.log
-    .map(entry => `<div class="log-item"><div class="log-time">${entry.time}</div><strong>${entry.action}</strong> ${entry.text}${entry.xp ? `<div class="log-xp">${entry.xp}</div>` : ""}</div>`)
-    .join("");
+  const items = state.log.length
+    ? state.log
+        .map(entry => `<div class="log-item"><div class="log-time">${timeLabel(entry.at)}</div><strong>${entry.action}</strong> ${entry.text}${entry.xp ? `<div class="log-xp">+${entry.xp} XP</div>` : ""}</div>`)
+        .join("")
+    : `<div class="log-item">No activity yet. Start your first lesson.</div>`;
   document.getElementById("log").innerHTML = `<div class="log-head">activity-log</div>${items}`;
 }
 
