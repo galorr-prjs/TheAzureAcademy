@@ -5,6 +5,7 @@ let correctCount = 0;
 let lessonTitle = lessonId;
 
 async function init() {
+  await pullFromCloud();
   document.getElementById("exit").href = "lesson.html?id=" + lessonId;
   const response = await fetch("data/quizzes.json");
   const quizzes = await response.json();

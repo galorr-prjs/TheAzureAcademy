@@ -1,7 +1,9 @@
-const state = loadProgress();
+let state = loadProgress();
 
 async function init() {
   const id = new URLSearchParams(location.search).get("id");
+  await pullFromCloud();
+  state = loadProgress();
   const response = await fetch("data/lessons.json");
   const data = await response.json();
   const path = data.paths[0];

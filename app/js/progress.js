@@ -1,5 +1,20 @@
 const STORAGE_KEY = "azure-academy-progress";
 
+let cloudUser = null;
+const cloudReady = initCloud();
+
+// Asks Azure who is signed in. Locally (localhost) this fails quietly, so you stay signed out.
+async function initCloud() {
+  try {
+    const response = await fetch("/.auth/me");
+    const data = await response.json();
+    cloudUser = data.clientPrincipal || null;
+  } catch (error) {
+    cloudUser = null;
+  }
+  return cloudUser;
+}
+
 function emptyProgress() {
   return { completed: [], xp: 0, streak: 0, lastActive: null, quizScores: {}, log: [] };
 }
@@ -13,11 +28,80 @@ function loadProgress() {
   }
 }
 
-function saveProgress(progress) {
+function writeLocal(progress) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
   } catch (error) {
-    // Storage is unavailable, so progress just won't be kept.
+    // Storage is unavailable, so progress just won't be kept in this browser.
+  }
+}
+
+function pushToCloud(progress) {
+  if (!cloudUser) return;
+  // keepalive lets the request finish even if the page changes right after.
+  fetch("/api/progress", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(progress),
+    keepalive: true
+  }).catch(() => {
+    // Offline or API down: the browser copy still has the progress.
+  });
+}
+
+function saveProgress(progress) {
+  writeLocal(progress);
+  pushToCloud(progress);
+}
+
+// Loads the cloud copy into the browser. Returns true if the browser copy changed.
+async function pullFromCloud() {
+  await cloudReady;
+  if (!cloudUser) return false;
+  try {
+    const response = await fetch("/api/progress");
+    if (!response.ok) return false;
+    const cloud = { ...emptyProgress(), ...(await response.json()) };
+    const local = loadProgress();
+    const cloudHasData = cloud.completed.length > 0 || cloud.xp > 0 || Object.keys(cloud.quizScores).length > 0;
+
+    if (cloudHasData) {
+      writeLocal(cloud);
+      return JSON.stringify(cloud) !== JSON.stringify(local);
+    }
+
+    // First sign-in: upload any progress already stored in this browser.
+    const localHasData = local.completed.length > 0 || local.xp > 0;
+    if (localHasData) pushToCloud(local);
+    return false;
+  } catch (error) {
+    return false;
+  }
+}
+
+async function renderAccount() {
+  const slot = document.getElementById("account");
+  if (!slot) return;
+  await cloudReady;
+  slot.textContent = "";
+
+  if (cloudUser) {
+    const name = document.createElement("span");
+    name.className = "account-name";
+    name.textContent = cloudUser.userDetails;
+    const out = document.createElement("a");
+    out.href = "/.auth/logout?post_logout_redirect_uri=/";
+    out.textContent = "sign out";
+    slot.append(name, out);
+  } else {
+    const back = encodeURIComponent(location.pathname + location.search);
+    const link = document.createElement("a");
+    link.href = "/.auth/login/github?post_login_redirect_uri=" + back;
+    link.textContent = "sign in";
+    const note = document.createElement("span");
+    note.className = "account-note";
+    note.textContent = "to save your progress to your account";
+    slot.append(link, note);
   }
 }
 
@@ -86,3 +170,5 @@ function timeLabel(iso) {
   if (dayKey(date) === dayKey(yesterday)) return "YESTERDAY " + time;
   return date.toLocaleDateString([], { day: "numeric", month: "short" }).toUpperCase();
 }
+
+renderAccount();

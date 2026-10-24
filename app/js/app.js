@@ -1,8 +1,18 @@
-const state = loadProgress();
+let state = loadProgress();
 
 async function init() {
   const response = await fetch("data/lessons.json");
   const data = await response.json();
+  renderAll(data);
+
+  const changed = await pullFromCloud();
+  if (changed) {
+    state = loadProgress();
+    renderAll(data);
+  }
+}
+
+function renderAll(data) {
   renderStats();
   renderMainPath(data.paths[0]);
   renderOtherPaths(data.paths.slice(1));

@@ -143,3 +143,9 @@ a.node:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
   .node { flex-basis: 100%; }
   .link { flex-basis: 20px; width: 2px; height: 20px; margin-left: 24px; }
 }
+
+.account { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; font-family: var(--mono); font-size: 13px; }
+.account a { display: inline-flex; align-items: center; min-height: 44px; }
+.account-name { padding: 4px 10px; background: #fff; border: 2px solid var(--ink); }
+.account-note { color: var(--muted); }
+@media (max-width: 900px) { .account-note { display: none; } }
