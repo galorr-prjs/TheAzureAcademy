@@ -92,6 +92,7 @@ async function renderAccount() {
     const out = document.createElement("a");
     out.href = "/.auth/logout?post_logout_redirect_uri=/";
     out.textContent = "sign out";
+    out.addEventListener("click", () => localStorage.removeItem(STORAGE_KEY));
     slot.append(name, out);
   } else {
     const back = encodeURIComponent(location.pathname + location.search);
