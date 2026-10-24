@@ -1,6 +1,6 @@
 const { app } = require("@azure/functions");
-const { getContainer } = require("../lib/cosmos");
-const { getUser } = require("../lib/auth");
+const { getContainer } = require("../helpers/cosmos");
+const { getUser } = require("../helpers/auth");
 
 function emptyProgress() {
   return { completed: [], xp: 0, streak: 0, lastActive: null, quizScores: {}, log: [] };
