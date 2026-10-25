@@ -33,8 +33,34 @@
           "analogy": "IaaS is renting an empty plot, PaaS is a furnished flat, and SaaS is a hotel room.",
           "lab": { "id": "open-the-portal", "text": "Open the Azure portal and find where Virtual Machines and App Service appear in the service list." }
         },
-        { "id": "azure-regions", "title": "Azure regions", "minutes": 7, "xp": 50 },
-        { "id": "entra-id", "title": "Entra ID", "minutes": 9, "xp": 60 },
+        {
+          "id": "azure-regions",
+          "title": "Azure regions",
+          "minutes": 7,
+          "xp": 50,
+          "lead": "An Azure region is a group of datacenters in one part of the world. Where you place your resources affects speed, cost, availability, and where your data legally lives.",
+          "cards": [
+            { "tag": "Region", "title": "Where it runs", "manage": "a set of datacenters in one area", "example": "West Europe", "color": "#1473E6" },
+            { "tag": "Zones", "title": "Availability zones", "manage": "separate buildings inside one region", "example": "Zone-redundant storage", "color": "#8E5CF0" },
+            { "tag": "Pairs", "title": "Region pairs", "manage": "two regions for disaster recovery", "example": "Geo-redundant storage", "color": "#12A150" }
+          ],
+          "analogy": "A region is a city. Availability zones are separate neighborhoods with their own power. A region pair is a second city, far enough away to survive a disaster in the first.",
+          "lab": { "id": "check-regions", "text": "In the Azure portal, search for \"Resource groups\", start creating one, and open the Region dropdown to see how many regions Azure offers." }
+        },
+        {
+          "id": "entra-id",
+          "title": "Entra ID",
+          "minutes": 9,
+          "xp": 60,
+          "lead": "Microsoft Entra ID is Azure's cloud identity service. For every request it answers two questions: who are you, and what are you allowed to do? It signs people into the Azure portal, Microsoft 365 and many other apps. The sign-in on this very site works on the same idea.",
+          "cards": [
+            { "tag": "AuthN", "title": "Authentication", "manage": "proves who you are", "example": "Sign-in with multi-factor authentication", "color": "#1473E6" },
+            { "tag": "AuthZ", "title": "Authorization", "manage": "decides what you can do", "example": "Azure role-based access control", "color": "#8E5CF0" },
+            { "tag": "SSO", "title": "Single sign-on", "manage": "one login for many apps", "example": "Azure portal and Microsoft 365", "color": "#12A150" }
+          ],
+          "analogy": "Authentication is showing your ID at the door of a building. Authorization is the keycard that decides which rooms you can enter.",
+          "lab": { "id": "explore-entra", "text": "In the Azure portal, search for \"Microsoft Entra ID\" and open it. Find your tenant name and open the Users list." }
+        },
         { "id": "practice-exam", "title": "Practice exam", "minutes": null, "xp": 150 }
       ]
     },

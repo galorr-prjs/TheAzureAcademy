@@ -1,4 +1,5 @@
-{  "what-is-cloud-computing": [
+{
+  "what-is-cloud-computing": [
     {
       "question": "Which statement best describes cloud computing?",
       "options": ["Renting computing resources over the internet", "Buying servers and installing them in your office", "A type of web browser", "Storing files only on your own laptop"],
@@ -60,6 +61,70 @@
       "options": ["Microsoft, always", "You, the customer", "The end users", "Nobody"],
       "answer": 1,
       "explanation": "A virtual machine is IaaS, so keeping the operating system updated is your job. This is part of the shared responsibility model."
+    }
+  ],
+  "azure-regions": [
+    {
+      "question": "What is an Azure region?",
+      "options": ["A set of datacenters connected by a fast network in one geographic area", "A single physical server", "A pricing plan", "A type of virtual network"],
+      "answer": 0,
+      "explanation": "A region is a group of datacenters in one area of the world. When you create a resource, you choose which region it runs in."
+    },
+    {
+      "question": "What is an availability zone?",
+      "options": ["A pricing tier", "A different country", "A separate datacenter location inside a region, with its own power, cooling and networking", "A type of virtual machine"],
+      "answer": 2,
+      "explanation": "Zones are physically separate locations within one region. If one zone has a problem, the others can keep your app running."
+    },
+    {
+      "question": "Why would you spread an app across availability zones?",
+      "options": ["To make the app slower", "To keep it running if one zone has a problem", "To reduce the number of users", "To avoid using regions"],
+      "answer": 1,
+      "explanation": "Spreading across zones protects you from a failure in a single datacenter location, which improves availability."
+    },
+    {
+      "question": "What are region pairs mainly used for?",
+      "options": ["Splitting your bill in two", "Giving two apps the same name", "Making deployments cheaper", "Disaster recovery in a second region far from the first"],
+      "answer": 3,
+      "explanation": "Each region is paired with another, far enough away that one disaster is unlikely to affect both. Some services can copy your data to the paired region."
+    },
+    {
+      "question": "Which factors should you consider when choosing a region?",
+      "options": ["Whichever region is first in the list", "Distance to users, service availability, cost and data residency rules", "Your computer's screen resolution", "How many lessons you have completed"],
+      "answer": 1,
+      "explanation": "Closer regions are usually faster, prices and available services vary by region, and some data must legally stay in certain countries."
+    }
+  ],
+  "entra-id": [
+    {
+      "question": "What does Microsoft Entra ID do?",
+      "options": ["Manages identities and controls access to resources", "Stores large files", "Runs virtual machines", "Measures network speed"],
+      "answer": 0,
+      "explanation": "Entra ID is Azure's cloud identity service. It checks who a user is and helps control what they can access."
+    },
+    {
+      "question": "What is authentication?",
+      "options": ["Deciding which resources a user may use", "Proving who you are", "Encrypting a database", "Choosing a region"],
+      "answer": 1,
+      "explanation": "Authentication is the step where you prove your identity, for example with a password plus a phone prompt."
+    },
+    {
+      "question": "What is authorization?",
+      "options": ["Checking a user's password", "Creating a new subscription", "Deciding what a signed-in user is allowed to do", "Backing up data"],
+      "answer": 2,
+      "explanation": "Authorization happens after authentication. It decides which resources and actions a verified user can access."
+    },
+    {
+      "question": "What does single sign-on (SSO) let you do?",
+      "options": ["Skip passwords entirely", "Share one account between many people", "Run apps faster", "Sign in once and use many apps without signing in again"],
+      "answer": 3,
+      "explanation": "With SSO, one sign-in gives you access to several apps, so you do not have to remember a separate login for each."
+    },
+    {
+      "question": "What does multi-factor authentication (MFA) add?",
+      "options": ["A faster sign-in page", "An extra proof of identity beyond your password", "A larger storage quota", "A second Azure region"],
+      "answer": 1,
+      "explanation": "MFA asks for more than one proof of identity, such as a password and a code from your phone, so a stolen password alone is not enough."
     }
   ]
 }
