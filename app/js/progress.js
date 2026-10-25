@@ -94,15 +94,17 @@ async function renderAccount() {
     out.textContent = "sign out";
     out.addEventListener("click", () => localStorage.removeItem(STORAGE_KEY));
     slot.append(name, out);
-  } else {
+    } else {
     const back = encodeURIComponent(location.pathname + location.search);
-    const link = document.createElement("a");
-    link.href = "/.auth/login/github?post_login_redirect_uri=" + back;
-    link.textContent = "sign in";
-    const note = document.createElement("span");
-    note.className = "account-note";
-    note.textContent = "to save your progress to your account";
-    slot.append(link, note);
+    const label = document.createElement("span");
+    label.textContent = "sign in:";
+    slot.append(label);
+    [["GitHub", "github"], ["Microsoft", "aad"]].forEach(([name, id]) => {
+      const link = document.createElement("a");
+      link.href = `/.auth/login/${id}?post_login_redirect_uri=${back}`;
+      link.textContent = name;
+      slot.append(link);
+    });
   }
 }
 
