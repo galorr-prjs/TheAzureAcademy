@@ -143,4 +143,4 @@ docs/                      early MkDocs lesson drafts (not published)
 
 ## Author
 
-Built by [YOUR NAME](https://github.com/galorr-prjs).
+Built by [Gal Orr](https://github.com/galorr-prjs).
