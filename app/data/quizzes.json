@@ -1,4 +1,67 @@
 {
+    "practice-exam": [
+    {
+      "question": "A shop expects heavy traffic only during its yearly sale. Which cloud benefit helps most?",
+      "options": ["Buying extra servers to keep all year", "A fixed monthly price whatever the usage", "Elasticity: adding resources for the sale and removing them afterwards", "Running everything in one datacenter"],
+      "answer": 2,
+      "explanation": "Elasticity lets you scale up for a busy period and back down afterwards, so you only pay for the extra capacity while you need it."
+    },
+    {
+      "question": "What is the main idea behind pay-as-you-go pricing?",
+      "options": ["You pay for the resources you consume", "You pay once and own the hardware", "You pay only if the app crashes", "You pay the same every month forever"],
+      "answer": 0,
+      "explanation": "Consumption-based pricing means your bill follows your usage, instead of an upfront hardware purchase."
+    },
+    {
+      "question": "Which statement is true for every service model, including SaaS?",
+      "options": ["You manage the physical servers", "The provider manages your data and account access", "The provider writes and maintains your application code", "The provider looks after the physical datacenter and hardware"],
+      "answer": 3,
+      "explanation": "The physical datacenter is always the provider's job. You are always responsible for your own data and who can access it."
+    },
+    {
+      "question": "You want Azure to handle the operating system and patching while you manage only your code. Which model fits?",
+      "options": ["IaaS", "PaaS", "SaaS", "On-premises"],
+      "answer": 1,
+      "explanation": "PaaS, such as Azure App Service, manages the platform and operating system for you, so you only manage the app and its data."
+    },
+    {
+      "question": "Which of these is an example of SaaS?",
+      "options": ["Azure Virtual Machines", "Azure Virtual Network", "Microsoft 365", "A server in your own office"],
+      "answer": 2,
+      "explanation": "Microsoft 365 is finished software delivered over the internet. The provider runs everything underneath."
+    },
+    {
+      "question": "In which model are you responsible for patching the operating system?",
+      "options": ["IaaS", "PaaS", "SaaS", "None of them"],
+      "answer": 0,
+      "explanation": "With IaaS, such as a virtual machine, the operating system is yours to update. PaaS and SaaS shift that job to the provider."
+    },
+    {
+      "question": "What do availability zones protect you from?",
+      "options": ["Forgetting your password", "Paying for too many users", "Running out of storage space", "The failure of one datacenter location inside a region"],
+      "answer": 3,
+      "explanation": "Zones are separate locations within a region, each with its own power, cooling and networking, so one failure does not take everything down."
+    },
+    {
+      "question": "Why can the region you choose matter for legal reasons?",
+      "options": ["Regions decide your password length", "Some data must stay in certain countries (data residency)", "Regions control which browser you can use", "All regions have exactly the same prices"],
+      "answer": 1,
+      "explanation": "Some laws and company rules require data to stay within a country or area, so the region you pick can decide whether you comply."
+    },
+    {
+      "question": "A user signs in with a password and then approves a prompt on their phone. What is this?",
+      "options": ["Single sign-on", "Authorization", "Multi-factor authentication", "Region pairing"],
+      "answer": 2,
+      "explanation": "Multi-factor authentication asks for more than one proof of identity, here a password plus an approval on a second device."
+    },
+    {
+      "question": "A user signs in successfully but cannot delete a resource group. Which concept explains this?",
+      "options": ["The region is unavailable", "They lack the needed permission, which is authorization", "Their password is wrong, which is authentication", "Single sign-on is turned off"],
+      "answer": 1,
+      "explanation": "Signing in proves who they are (authentication). What they may do is decided separately by their permissions (authorization)."
+    }
+  ],
+  
   "what-is-cloud-computing": [
     {
       "question": "Which statement best describes cloud computing?",

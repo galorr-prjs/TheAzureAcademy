@@ -61,7 +61,20 @@
           "analogy": "Authentication is showing your ID at the door of a building. Authorization is the keycard that decides which rooms you can enter.",
           "lab": { "id": "explore-entra", "text": "In the Azure portal, search for \"Microsoft Entra ID\" and open it. Find your tenant name and open the Users list." }
         },
-        { "id": "practice-exam", "title": "Practice exam", "minutes": null, "xp": 150 }
+        {
+          "id": "practice-exam",
+          "title": "Practice exam",
+          "minutes": null,
+          "xp": 150,
+          "lead": "Ten questions drawn from all four Fundamentals lessons: cloud basics, service models, regions and Entra ID. The real AZ-900 exam uses a scaled score with a pass mark of 700 out of 1000, so treat roughly 70 percent as your target. Retake it as often as you like.",
+          "cards": [
+            { "tag": "Mix", "title": "10 questions", "manage": "from every lesson in the path", "example": "Cloud basics to Entra ID", "color": "#1473E6" },
+            { "tag": "Goal", "title": "Aim for 70%", "manage": "close to the AZ-900 pass mark", "example": "Review the lessons you miss", "color": "#8E5CF0" },
+            { "tag": "XP", "title": "First attempt", "manage": "XP is given once per quiz", "example": "Your best score is always saved", "color": "#12A150" }
+          ],
+          "analogy": "The practice exam is a dress rehearsal: same stage, same props, but nobody is judging and you can run it again.",
+          "lab": { "id": "review-first", "text": "Before you start, skim the four lessons once more and note one Azure service from each that you could explain out loud." }
+        }
       ]
     },
     {
