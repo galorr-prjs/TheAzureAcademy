@@ -1,12 +1,10 @@
 # Azure Academy
 
-# Azure Academy
-
 An interactive learning platform for Azure, built from scratch and hosted on Azure. Lessons are laid out like an architecture diagram: every lesson is a resource you "deploy", and finishing a path completes the whole architecture.
 
 **Live site:** [victorious-coast-0e2e4d00f.1.azurestaticapps.net](https://victorious-coast-0e2e4d00f.1.azurestaticapps.net)
 
-![Azure Academy dashboard](screenshots/Dashboard.png)
+![Azure Academy dashboard](Screenshots/Dashboard.png)
 
 ## Features
 
@@ -14,17 +12,23 @@ An interactive learning platform for Azure, built from scratch and hosted on Azu
 - **Lessons** with Azure service examples, analogies and hands-on lab prompts
 - **Quizzes** with instant feedback and an explanation for every answer
 - **Progress tracking:** XP, daily streak, quiz scores and an activity log
-- **Sign in with GitHub:** progress is saved to your account in the cloud and follows you across devices. Without signing in, progress is kept in the browser.
+- **Sign in with GitHub or Microsoft (Entra ID):** progress is saved to your account in the cloud and follows you across devices. Without signing in, progress is kept in the browser.
 - **Content as data:** lessons and quizzes live in JSON files, so adding content doesn't require changing code
 
-The first learning path, Azure Fundamentals (AZ-900), is in progress, and lessons are being added.
+The first learning path, Azure Fundamentals (AZ-900), is in progress. Four lessons with quizzes are done (Cloud basics, Service models, Azure regions and Entra ID), and a practice exam is next.
+
+## Screenshots
+
+| Lesson page | Quiz feedback |
+|---|---|
+| ![Lesson page](Screenshots/Lesson.png) | ![Quiz](Screenshots/Quiz.png) |
 
 ## Architecture
 
 ```mermaid
 flowchart LR
   U[Browser] -->|static pages| S[Azure Static Web Apps<br/>Free plan]
-  U -->|sign in| A[GitHub sign-in<br/>built-in auth]
+  U -->|sign in| A[GitHub or Microsoft Entra ID<br/>built-in auth]
   U -->|/api/progress| F[Azure Functions<br/>managed API]
   F -->|read and write| C[(Azure Cosmos DB<br/>free tier)]
   G[GitHub Actions] -->|deploy on every push| S
@@ -37,25 +41,44 @@ flowchart LR
 | Azure Static Web Apps (Free plan) | Hosting the site and the API | Free plan |
 | Azure Functions (managed with Static Web Apps) | Serverless API for saving and loading progress | Included with the Free plan |
 | Azure Cosmos DB for NoSQL (free tier) | Stores each learner's progress | Free tier, throughput capped at 400 RU/s |
-| Static Web Apps built-in authentication | Sign in with GitHub | Included with the Free plan |
+| Microsoft Entra ID (built-in sign-in) | Sign in with a Microsoft account | Included with the Free plan |
+| GitHub sign-in (built-in) | Sign in with GitHub | Included with the Free plan |
+| Azure Cost Management | Budget alert to catch unexpected spending | Free |
 | GitHub Actions | Automatic deployment | Free |
 
 Everything is deliberately kept inside free allowances, with a budget alert set in Azure Cost Management.
+
+![Azure resources in the project's resource group](Screenshots/azure-resources.png)
 
 ## Security and privacy
 
 - The API route that handles progress **requires sign-in**. Azure checks the identity before the function runs.
 - The learner's ID comes **only** from the identity Azure attaches to the request, never from the request body, so one user can't read or overwrite another user's data.
 - The database stores an **anonymous ID plus progress data**. It holds no names or email addresses.
+
+![A progress record in Cosmos DB](Screenshots/cosmos-item.png)
+
 - Incoming data is **validated and size-limited** before it is saved.
 - The database connection string lives in the Static Web App's **application settings**, never in the repository.
+
+## Hands-on: access control with Entra ID
+
+To practice Microsoft Entra ID outside the app, I created a test user and gave it the built-in **Reader** role on the project's resource group, so it can view the resources but not change them. It's a small example of least privilege, and of the difference between authentication (the user exists) and authorization (what the user can do).
+
+![Reader role assignment](Screenshots/entra-reader-role.png)
+
+## CI/CD
+
+Every push to `main` builds and deploys the site and the API through GitHub Actions.
+
+![A successful GitHub Actions run](Screenshots/actions.png)
 
 ## Tech stack
 
 - HTML, CSS and vanilla JavaScript on the front end, with no framework or build step
 - Node.js 20 and the Azure Functions v4 programming model for the API
 - JSON files for lesson and quiz content
-- GitHub Actions for deployment on every push to `main`
+- GitHub Actions for deployment
 
 ## How it works
 
@@ -109,10 +132,12 @@ docs/                      early MkDocs lesson drafts (not published)
 
 - [x] Static hosting on Azure with automatic deployment
 - [x] Serverless API with Azure Functions
-- [x] Cosmos DB for saved progress, with GitHub sign-in
-- [ ] Finish the Azure Fundamentals lessons and quizzes
+- [x] Cosmos DB for saved progress, with GitHub and Microsoft sign-in
+- [x] Hands-on access control with Entra ID
+- [ ] Azure Fundamentals practice exam
 - [ ] Monitoring with Application Insights
 - [ ] Describe the Azure resources as code with Bicep
+- [ ] Admin role using Static Web Apps invitations
 - [ ] Compute & Networking, Storage & Databases and Identity & Security paths
 - [ ] Certificate of completion for finished paths
 
