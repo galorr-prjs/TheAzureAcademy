@@ -15,7 +15,7 @@ An interactive learning platform for Azure, built from scratch and hosted on Azu
 - **Sign in with GitHub or Microsoft (Entra ID):** progress is saved to your account in the cloud and follows you across devices. Without signing in, progress is kept in the browser.
 - **Content as data:** lessons and quizzes live in JSON files, so adding content doesn't require changing code
 
-The first learning path, Azure Fundamentals (AZ-900), is in progress. Four lessons with quizzes are done (Cloud basics, Service models, Azure regions and Entra ID), and a practice exam is next.
+The first learning path of Azure Fundamentals (AZ-900), is complete: four lessons with quizzes and a 10-question practice exam.
 
 ## Screenshots
 
@@ -134,7 +134,7 @@ docs/                      early MkDocs lesson drafts (not published)
 - [x] Serverless API with Azure Functions
 - [x] Cosmos DB for saved progress, with GitHub and Microsoft sign-in
 - [x] Hands-on access control with Entra ID
-- [ ] Azure Fundamentals practice exam
+- [x] Azure Fundamentals practice exam
 - [ ] Monitoring with Application Insights
 - [ ] Describe the Azure resources as code with Bicep
 - [ ] Admin role using Static Web Apps invitations
