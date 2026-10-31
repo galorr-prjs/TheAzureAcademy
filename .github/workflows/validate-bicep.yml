@@ -1,0 +1,20 @@
+name: Validate Bicep
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "infra/**"
+  pull_request:
+    paths:
+      - "infra/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the Bicep file (syntax and types)
+        run: az bicep build --file infra/main.bicep --stdout > /dev/null
