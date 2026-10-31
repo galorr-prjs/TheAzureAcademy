@@ -10,14 +10,12 @@ An interactive learning platform for Azure, built from scratch and hosted on Azu
 
 - **Learning map:** a dashboard styled like an architecture diagram, where each lesson shows as `PROVISIONED`, `DEPLOYING` or `NOT STARTED`
 - **Lessons** with Azure service examples, analogies and hands-on lab prompts
-- **Quizzes** with instant feedback and an explanation for every answer
+- **Quizzes** with instant feedback and an explanation for every answer, plus a 10-question practice exam
 - **Progress tracking:** XP, daily streak, quiz scores and an activity log
 - **Sign in with GitHub or Microsoft (Entra ID):** progress is saved to your account in the cloud and follows you across devices. Without signing in, progress is kept in the browser.
 - **Content as data:** lessons and quizzes live in JSON files, so adding content doesn't require changing code
 
-The first learning path, Azure Fundamentals (AZ-900), is in progress. Four lessons with quizzes are done (Cloud basics, Service models, Azure regions and Entra ID), and a practice exam is next.
-
-## Screenshots
+The first learning path, Azure Fundamentals (AZ-900), is complete: four lessons with quizzes (Cloud basics, Service models, Azure regions, Entra ID) and a practice exam.
 
 | Lesson page | Quiz feedback |
 |---|---|
@@ -38,15 +36,16 @@ flowchart LR
 
 | Service | Used for | Cost |
 |---|---|---|
-| Azure Static Web Apps (Free plan) | Hosting the site and the API | Free plan |
+| Azure Static Web Apps (Free plan) | Hosting the site and the API, plus preview environments for pull requests | Free plan |
 | Azure Functions (managed with Static Web Apps) | Serverless API for saving and loading progress | Included with the Free plan |
 | Azure Cosmos DB for NoSQL (free tier) | Stores each learner's progress | Free tier, throughput capped at 400 RU/s |
 | Microsoft Entra ID (built-in sign-in) | Sign in with a Microsoft account | Included with the Free plan |
-| GitHub sign-in (built-in) | Sign in with GitHub | Included with the Free plan |
+| Azure Policy, resource locks, tags | Governance and protection against accidental deletion | No charge |
+| Azure Advisor, Defender for Cloud (free tier) | Reviewing recommendations and security posture | Free tier only |
 | Azure Cost Management | Budget alert to catch unexpected spending | Free |
-| GitHub Actions | Automatic deployment | Free |
+| GitHub Actions | Automatic deployment and checks | Free |
 
-Everything is deliberately kept inside free allowances, with a budget alert set in Azure Cost Management.
+Everything is deliberately kept inside free allowances, with a budget alert in Azure Cost Management.
 
 ![Azure resources in the project's resource group](Screenshots/azure-resources.png)
 
@@ -55,11 +54,22 @@ Everything is deliberately kept inside free allowances, with a budget alert set 
 - The API route that handles progress **requires sign-in**. Azure checks the identity before the function runs.
 - The learner's ID comes **only** from the identity Azure attaches to the request, never from the request body, so one user can't read or overwrite another user's data.
 - The database stores an **anonymous ID plus progress data**. It holds no names or email addresses.
+- Incoming data is **validated and size-limited** before it is saved.
+- The database connection string lives in the Static Web App's **application settings**, never in the repository.
 
 ![A progress record in Cosmos DB](Screenshots/cosmos-item.png)
 
-- Incoming data is **validated and size-limited** before it is saved.
-- The database connection string lives in the Static Web App's **application settings**, never in the repository.
+## Reliability and governance
+
+- **Backups:** Cosmos DB uses continuous backup (7-day retention) for point-in-time restore.
+- **Delete lock:** the resource group has a "Can't delete" lock, so the database can't be removed by accident.
+- **Tags:** resources are tagged `project=azure-academy` and `environment=learning`, so costs can be filtered by project.
+- **Policy:** I practiced Azure Policy in a separate sandbox resource group, with a built-in "Allowed locations" policy that blocks resources outside one region.
+- **Advisor and Defender for Cloud:** I reviewed the free recommendations and security posture, and kept every paid Defender plan off.
+
+| Delete lock | Policy blocking a disallowed region |
+|---|---|
+| ![Resource lock](Screenshots/resource-lock.png) | ![Policy validation failure](Screenshots/policy-blocked.png) |
 
 ## Hands-on: access control with Entra ID
 
@@ -67,18 +77,23 @@ To practice Microsoft Entra ID outside the app, I created a test user and gave i
 
 ![Reader role assignment](Screenshots/entra-reader-role.png)
 
-## CI/CD
+## CI/CD and infrastructure as code
 
-Every push to `main` builds and deploys the site and the API through GitHub Actions.
+- Every push to `main` builds and deploys the site and the API through GitHub Actions.
+- Pull requests get their own **preview environment**, which is deleted when the pull request is closed.
+- The Azure setup is described as code in [`infra/main.bicep`](infra/main.bicep) and validated by a GitHub Actions workflow on every change. The file documents the setup and can rebuild it, and it is deliberately not deployed automatically.
 
-![A successful GitHub Actions run](Screenshots/actions.png)
+| Successful deployment run | Production and preview environments |
+|---|---|
+| ![GitHub Actions run](Screenshots/actions.png) | ![Preview environments](Screenshots/preview-environments.png) |
 
 ## Tech stack
 
 - HTML, CSS and vanilla JavaScript on the front end, with no framework or build step
 - Node.js 20 and the Azure Functions v4 programming model for the API
 - JSON files for lesson and quiz content
-- GitHub Actions for deployment
+- GitHub Actions for deployment and validation
+- Bicep for infrastructure as code
 
 ## How it works
 
@@ -124,8 +139,12 @@ api/
   src/helpers/
     auth.js                reads the signed-in user
     cosmos.js              Cosmos DB connection
+infra/
+  main.bicep               the Azure setup described as code
 docs/                      early MkDocs lesson drafts (not published)
-.github/workflows/         deployment to Azure Static Web Apps
+.github/workflows/
+  azure-static-web-apps-*.yml   build and deploy to Azure Static Web Apps
+  validate-bicep.yml            checks the Bicep file
 ```
 
 ## Roadmap
@@ -134,9 +153,12 @@ docs/                      early MkDocs lesson drafts (not published)
 - [x] Serverless API with Azure Functions
 - [x] Cosmos DB for saved progress, with GitHub and Microsoft sign-in
 - [x] Hands-on access control with Entra ID
-- [ ] Azure Fundamentals practice exam
+- [x] Governance basics: tags, lock, Azure Policy
+- [x] Preview environments for pull requests
+- [x] Azure Fundamentals path and practice exam
+- [x] Infrastructure described as code with Bicep (IaC)
+- [ ] Sign in from GitHub Actions to Azure with OIDC, so the pipeline can compare the Bicep file with the real setup
 - [ ] Monitoring with Application Insights
-- [ ] Describe the Azure resources as code with Bicep
 - [ ] Admin role using Static Web Apps invitations
 - [ ] Compute & Networking, Storage & Databases and Identity & Security paths
 - [ ] Certificate of completion for finished paths
