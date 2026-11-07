@@ -30,6 +30,8 @@ flowchart LR
   U -->|/api/progress| F[Azure Functions<br/>managed API]
   F -->|read and write| C[(Azure Cosmos DB<br/>free tier)]
   G[GitHub Actions] -->|deploy on every push| S
+  G -->|OIDC token, no stored password| E[Microsoft Entra ID<br/>workload identity]
+  E -->|short-lived access token| R[Resource group<br/>read-only what-if]
 ```
 
 ## Azure services used
@@ -38,12 +40,12 @@ flowchart LR
 |---|---|---|
 | Azure Static Web Apps (Free plan) | Hosting the site and the API, plus preview environments for pull requests | Free plan |
 | Azure Functions (managed with Static Web Apps) | Serverless API for saving and loading progress | Included with the Free plan |
-| Azure Cosmos DB for NoSQL (free tier) | Stores each learner's progress | Free tier, throughput capped at 400 RU/s |
-| Microsoft Entra ID (built-in sign-in) | Sign in with a Microsoft account | Included with the Free plan |
+| Azure Cosmos DB for NoSQL (free tier) | Stores each learner's progress | Free tier, throughput capped inside the free allowance |
+| Microsoft Entra ID | Built-in sign-in for learners, and a workload identity for the CI pipeline | Included |
 | Azure Policy, resource locks, tags | Governance and protection against accidental deletion | No charge |
-| Azure Advisor, Defender for Cloud (free tier) | Reviewing recommendations and security posture | Free tier only |
+| Azure Advisor | Reviewing recommendations | Free |
 | Azure Cost Management | Budget alert to catch unexpected spending | Free |
-| GitHub Actions | Automatic deployment and checks | Free |
+| GitHub Actions | Deployment, validation and what-if checks | Free |
 
 Everything is deliberately kept inside free allowances, with a budget alert in Azure Cost Management.
 
@@ -56,6 +58,7 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 - The database stores an **anonymous ID plus progress data**. It holds no names or email addresses.
 - Incoming data is **validated and size-limited** before it is saved.
 - The database connection string lives in the Static Web App's **application settings**, never in the repository.
+- The CI pipeline signs in to Azure with **OIDC**, so no Azure password or secret is stored in GitHub (details below).
 
 ![A progress record in Cosmos DB](Screenshots/cosmos-item.png)
 
@@ -64,12 +67,10 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 - **Backups:** Cosmos DB uses continuous backup (7-day retention) for point-in-time restore.
 - **Delete lock:** the resource group has a "Can't delete" lock, so the database can't be removed by accident.
 - **Tags:** resources are tagged `project=azure-academy` and `environment=learning`, so costs can be filtered by project.
-- **Policy:** I practiced Azure Policy in a separate sandbox resource group, with a built-in "Allowed locations" policy that blocks resources outside one region.
-- **Advisor and Defender for Cloud:** I reviewed the free recommendations and security posture, and kept every paid Defender plan off.
+- **Policy:** I assigned a built-in "Allowed locations" policy to a separate sandbox resource group to practice Azure Policy.
+- **Advisor:** I reviewed the recommendations and weighed the cost of each one before acting. For example, I checked which continuous backup tier is free before switching.
 
-| Delete lock | Policy blocking a disallowed region |
-|---|---|
-| ![Resource lock](Screenshots/resource-lock.png) | ![Policy validation failure](Screenshots/policy-blocked.png) |
+![Resource lock](Screenshots/resource-lock.png)
 
 ## Hands-on: access control with Entra ID
 
@@ -81,18 +82,38 @@ To practice Microsoft Entra ID outside the app, I created a test user and gave i
 
 - Every push to `main` builds and deploys the site and the API through GitHub Actions.
 - Pull requests get their own **preview environment**, which is deleted when the pull request is closed.
-- The Azure setup is described as code in [`infra/main.bicep`](infra/main.bicep) and validated by a GitHub Actions workflow on every change. The file documents the setup and can rebuild it, and it is deliberately not deployed automatically.
+- The Azure setup is described as code in [`infra/main.bicep`](infra/main.bicep) and checked by a GitHub Actions workflow on every change. The file documents the setup and could rebuild it. It is deliberately not deployed automatically: the real resources already exist, and a second free-tier Cosmos DB account would not be free.
+
+### Passwordless sign-in from GitHub to Azure (OIDC)
+
+A second workflow runs `az deployment group what-if`, which compares the Bicep file with the real resource group and changes nothing.
+
+- **Workload identity:** an app registration in Entra ID represents the pipeline, with a **federated credential** that trusts only workflows from this repository's `main` branch, using GitHub's immutable subject format (owner and repository IDs).
+- **No stored secret:** GitHub issues a short-lived token for each run and Azure exchanges it for a short-lived access token. There is no password or client secret to leak or rotate.
+- **Least privilege:** a custom role on the one resource group allows reading and running what-if, and nothing else, so the pipeline cannot change or delete resources.
+- **Result:** the first run found drift between my hand-written file and the real setup (the account's throughput cap, automatic failover, tags Azure adds itself, and the Static Web App's GitHub connection). I corrected the file, so it now records what actually exists.
 
 | Successful deployment run | Production and preview environments |
 |---|---|
 | ![GitHub Actions run](Screenshots/actions.png) | ![Preview environments](Screenshots/preview-environments.png) |
+
+| What-if report from the OIDC workflow | Federated credential |
+|---|---|
+| ![What-if run](Screenshots/whatif-run.png) | ![Federated credential](Screenshots/federated-credential.png) |
+
+## Decisions and trade-offs
+
+- **Free tier first.** Every service was checked against Microsoft's current free allowances before use, and the Cosmos DB account was created with the free tier and a throughput cap. Azure has no hard spending cap on pay-as-you-go, so a budget alert and regular cost checks stand in for one.
+- **Managed API.** Static Web Apps' managed Functions keep deployment simple and free. The trade-off is that they only respond to web requests, and I have found no way to give them a managed identity on the Free plan, so the database connection uses a connection string stored in app settings.
+- **Browser-first progress.** Progress works without an account and syncs to the cloud after sign-in. If a signed-in account already has cloud progress, that copy wins over the one in the browser.
+- **Describe, don't deploy.** The Bicep file is checked but not deployed, as explained above.
 
 ## Tech stack
 
 - HTML, CSS and vanilla JavaScript on the front end, with no framework or build step
 - Node.js 20 and the Azure Functions v4 programming model for the API
 - JSON files for lesson and quiz content
-- GitHub Actions for deployment and validation
+- GitHub Actions for deployment, validation and what-if checks
 - Bicep for infrastructure as code
 
 ## How it works
@@ -145,6 +166,7 @@ docs/                      early MkDocs lesson drafts (not published)
 .github/workflows/
   azure-static-web-apps-*.yml   build and deploy to Azure Static Web Apps
   validate-bicep.yml            checks the Bicep file
+  bicep-whatif.yml              compares the Bicep file with Azure, via OIDC
 ```
 
 ## Roadmap
@@ -156,8 +178,8 @@ docs/                      early MkDocs lesson drafts (not published)
 - [x] Governance basics: tags, lock, Azure Policy
 - [x] Preview environments for pull requests
 - [x] Azure Fundamentals path and practice exam
-- [x] Infrastructure described as code with Bicep (IaC)
-- [ ] Sign in from GitHub Actions to Azure with OIDC, so the pipeline can compare the Bicep file with the real setup
+- [x] Infrastructure described as code with Bicep
+- [x] Passwordless GitHub-to-Azure sign-in with OIDC, and a what-if check
 - [ ] Monitoring with Application Insights
 - [ ] Admin role using Static Web Apps invitations
 - [ ] Compute & Networking, Storage & Databases and Identity & Security paths
