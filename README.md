@@ -67,10 +67,12 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 - **Backups:** Cosmos DB uses continuous backup (7-day retention) for point-in-time restore.
 - **Delete lock:** the resource group has a "Can't delete" lock, so the database can't be removed by accident.
 - **Tags:** resources are tagged `project=azure-academy` and `environment=learning`, so costs can be filtered by project.
-- **Policy:** I assigned a built-in "Allowed locations" policy to a separate sandbox resource group to practice Azure Policy.
+- **Policy:** I practiced Azure Policy in a separate sandbox resource group, with a built-in "Allowed locations" policy that blocks resources outside one region.
 - **Advisor:** I reviewed the recommendations and weighed the cost of each one before acting. For example, I checked which continuous backup tier is free before switching.
 
-![Resource lock](Screenshots/resource-lock.png)
+| Delete lock | Policy blocking a disallowed region |
+|---|---|
+| ![Resource lock](screenshots/resource-lock.png) | ![Policy validation failure](screenshots/policy-blocked.png) |
 
 ## Hands-on: access control with Entra ID
 
