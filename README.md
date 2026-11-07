@@ -72,7 +72,7 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 
 | Delete lock | Policy blocking a disallowed region |
 |---|---|
-| ![Resource lock](screenshots/resource-lock.png) | ![Policy validation failure](screenshots/policy-blocked.png) |
+| ![Resource lock](Screenshots/resource-lock.png) | ![Policy validation failure](Screenshots/policy-blocked.png) |
 
 ## Hands-on: access control with Entra ID
 
