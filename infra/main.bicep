@@ -1,6 +1,7 @@
 // Azure Academy infrastructure, described as code.
 // This file documents the setup and is checked in CI. It is NOT deployed automatically,
 // because the real resources already exist (and a second free-tier Cosmos DB account is not free).
+// A what-if workflow compares it with the real resource group and changes nothing.
 
 targetScope = 'resourceGroup'
 
@@ -9,6 +10,9 @@ param staticSiteName string = 'the-azure-academy'
 
 @description('Static Web Apps supports only a few regions, East US 2 is one of them')
 param staticSiteLocation string = 'eastus2'
+
+@description('GitHub repository the Static Web App deploys from')
+param repositoryUrl string = 'https://github.com/galorr-prjs/TheAzureAcademy'
 
 @description('Globally unique, lowercase name of the Cosmos DB account (kept out of the repo on purpose)')
 param cosmosAccountName string
@@ -30,20 +34,32 @@ resource staticSite 'Microsoft.Web/staticSites@2023-12-01' = {
     tier: 'Free'
   }
   properties: {
+    // The GitHub connection that exists today. Creating this link from scratch would also
+    // need a GitHub token (repositoryToken), which is deliberately not stored here.
+    repositoryUrl: repositoryUrl
+    branch: 'main'
+    provider: 'GitHub'
+    deploymentAuthPolicy: 'DeploymentToken'
     stagingEnvironmentPolicy: 'Enabled'
     allowConfigFileUpdates: true
   }
 }
 
-// Cosmos DB for NoSQL on the free tier, with throughput capped inside the free allowance.
+// Cosmos DB for NoSQL on the free tier. The account-level throughput cap is 1000 RU/s,
+// which is the size of the free allowance. The container below uses 400.
 resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2024-05-15' = {
   name: cosmosAccountName
   location: cosmosLocation
-  tags: tags
+  tags: union(tags, {
+    defaultExperience: 'Core (SQL)'
+    'hidden-workload-type': 'Learning'
+  })
   kind: 'GlobalDocumentDB'
   properties: {
     databaseAccountOfferType: 'Standard'
     enableFreeTier: true
+    enableAutomaticFailover: true
+    minimalTlsVersion: 'Tls12'
     consistencyPolicy: {
       defaultConsistencyLevel: 'Session'
     }
@@ -55,7 +71,7 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2024-05-15' = {
       }
     ]
     capacity: {
-      totalThroughputLimit: 400
+      totalThroughputLimit: 1000
     }
     backupPolicy: {
       type: 'Continuous'
