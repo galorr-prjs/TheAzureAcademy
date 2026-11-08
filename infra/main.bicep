@@ -39,7 +39,7 @@ resource staticSite 'Microsoft.Web/staticSites@2023-12-01' = {
     repositoryUrl: repositoryUrl
     branch: 'main'
     provider: 'GitHub'
-    deploymentAuthPolicy: 'DeploymentToken'
+    // deploymentAuthPolicy: 'DeploymentToken'
     stagingEnvironmentPolicy: 'Enabled'
     allowConfigFileUpdates: true
   }
