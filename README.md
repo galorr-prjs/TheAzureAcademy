@@ -1,4 +1,4 @@
-# Azure Academy
+\# Azure Academy
 
 An interactive learning platform for Azure, built from scratch and hosted on Azure. Lessons are laid out like an architecture diagram: every lesson is a resource you "deploy", and finishing a path completes the whole architecture.
 
@@ -72,8 +72,7 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 
 | Delete lock | Policy blocking a disallowed region |
 |---|---|
-| ![Resource lock](Screenshots/resource-lock.png) | ![Policy validation failure](Screenshots/policy-blocked.png) |
-
+| ![Resource lock](Screenshots/resource-lock.png) | ![Policy blocking a deployment](Screenshots/policy-blocked.png) |
 ## Hands-on: access control with Entra ID
 
 To practice Microsoft Entra ID outside the app, I created a test user and gave it the built-in **Reader** role on the project's resource group, so it can view the resources but not change them. It's a small example of least privilege, and of the difference between authentication (the user exists) and authorization (what the user can do).
@@ -86,22 +85,25 @@ To practice Microsoft Entra ID outside the app, I created a test user and gave i
 - Pull requests get their own **preview environment**, which is deleted when the pull request is closed.
 - The Azure setup is described as code in [`infra/main.bicep`](infra/main.bicep) and checked by a GitHub Actions workflow on every change. The file documents the setup and could rebuild it. It is deliberately not deployed automatically: the real resources already exist, and a second free-tier Cosmos DB account would not be free.
 
+| Successful deployment run | Production and preview environments |
+|---|---|
+| ![GitHub Actions run](Screenshots/actions.png) | ![Preview environments](Screenshots/preview-environments.png) |
+
 ### Passwordless sign-in from GitHub to Azure (OIDC)
 
 A second workflow runs `az deployment group what-if`, which compares the Bicep file with the real resource group and changes nothing.
 
 - **Workload identity:** an app registration in Entra ID represents the pipeline, with a **federated credential** that trusts only workflows from this repository's `main` branch, using GitHub's immutable subject format (owner and repository IDs).
-- **No stored secret:** GitHub issues a short-lived token for each run and Azure exchanges it for a short-lived access token. There is no password or client secret to leak or rotate.
+- **No stored secret:** GitHub issues a short-lived token for each run, and Azure exchanges it for a short-lived access token. There is no password or client secret to leak or rotate.
 - **Least privilege:** a custom role on the one resource group allows reading and running what-if, and nothing else, so the pipeline cannot change or delete resources.
-- **Result:** the first run found drift between my hand-written file and the real setup (the account's throughput cap, automatic failover, tags Azure adds itself, and the Static Web App's GitHub connection). I corrected the file, so it now records what actually exists.
+- **Result:** the first run found drift between my hand-written file and the real setup (the account's throughput cap, automatic failover, tags that Azure adds itself, and the Static Web App's GitHub connection). I corrected the file, so it now records what actually exists.
 
-| Successful deployment run | Production and preview environments |
-|---|---|
-| ![GitHub Actions run](Screenshots/actions.png) | ![Preview environments](Screenshots/preview-environments.png) |
+![Federated credential](Screenshots/federated-credential.png)
+*The pipeline's identity has no certificates and no client secrets. Its only credential is a federated trust that accepts tokens from this repository's `main` branch.*
 
-| What-if report from the OIDC workflow | Federated credential |
-|---|---|
-| ![What-if run](Screenshots/whatif-run.png) | ![Federated credential](Screenshots/federated-credential.png) |
+![What-if run, start of the report](Screenshots/whatif-run.png)
+![What-if run, end of the report](Screenshots/whatif-run-2.png)
+*A GitHub Actions run signs in to Azure with OIDC and compares the Bicep file with the real resource group. The "modify" counts come from default values that Azure fills in itself (the `-` rows). The real differences found in the first run were corrected in the file.*
 
 ## Decisions and trade-offs
 
@@ -164,6 +166,7 @@ api/
     cosmos.js              Cosmos DB connection
 infra/
   main.bicep               the Azure setup described as code
+Screenshots/               images used in this README
 docs/                      early MkDocs lesson drafts (not published)
 .github/workflows/
   azure-static-web-apps-*.yml   build and deploy to Azure Static Web Apps
