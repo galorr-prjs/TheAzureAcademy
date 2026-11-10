@@ -59,7 +59,9 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 - Incoming data is **validated and size-limited** before it is saved.
 - The database connection string lives in the Static Web App's **application settings**, never in the repository.
 - The CI pipeline signs in to Azure with **OIDC**, so no Azure password or secret is stored in GitHub (details below).
+- **Security headers:** a Content-Security-Policy restricts scripts to the site's own files and limits fonts and network requests to known origins. The site also sends X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy and Strict-Transport-Security. The changes were tested on a pull request preview before going live.
 
+![Security headers scan](Screenshots/security-headers.png)
 ![A progress record in Cosmos DB](Screenshots/cosmos-item.png)
 
 ## Reliability and governance
@@ -111,7 +113,7 @@ A second workflow runs `az deployment group what-if`, which compares the Bicep f
 - **Managed API.** Static Web Apps' managed Functions keep deployment simple and free. The trade-off is that they only respond to web requests, and I have found no way to give them a managed identity on the Free plan, so the database connection uses a connection string stored in app settings.
 - **Browser-first progress.** Progress works without an account and syncs to the cloud after sign-in. If a signed-in account already has cloud progress, that copy wins over the one in the browser.
 - **Describe, don't deploy.** The Bicep file is checked but not deployed, as explained above.
-
+- **Security headers.** The Content-Security-Policy restricts scripts to the site's own files and limits fonts and network requests to known origins. Styles still allow `'unsafe-inline'`, because some elements get their colors from data through inline style attributes. A planned cleanup would move those into CSS classes so the policy can drop it.
 ## Tech stack
 
 - HTML, CSS and vanilla JavaScript on the front end, with no framework or build step
@@ -185,6 +187,8 @@ docs/                      early MkDocs lesson drafts (not published)
 - [x] Azure Fundamentals path and practice exam
 - [x] Infrastructure described as code with Bicep
 - [x] Passwordless GitHub-to-Azure sign-in with OIDC, and a what-if check
+- [x] Security headers
+- [ ] Remove 'unsafe-inline' from the style policy
 - [ ] Monitoring with Application Insights
 - [ ] Admin role using Static Web Apps invitations
 - [ ] Compute & Networking, Storage & Databases and Identity & Security paths
