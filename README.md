@@ -65,7 +65,7 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 
 | Security headers PowerShell scan | Security headers A+ grade|
 |---|---|
-| ![PowerShell scan](Screenshots/security-headersPS.png) | ![securityheaders.com scan](Screenshots/security-headers.png) |
+| ![PowerShell scan](Screenshots/Powershell-SecurityHeaders.png) | ![securityheaders.com scan](Screenshots/security-headers.png) |
 
 
 ## Reliability and governance
