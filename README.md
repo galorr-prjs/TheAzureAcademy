@@ -3,6 +3,7 @@
 An interactive learning platform for Azure, built from scratch and hosted on Azure. Lessons are laid out like an architecture diagram: every lesson is a resource you "deploy", and finishing a path completes the whole architecture.
 
 **Live site:** [victorious-coast-0e2e4d00f.1.azurestaticapps.net](https://victorious-coast-0e2e4d00f.1.azurestaticapps.net)
+> **Note:** the live demo runs on an Azure free trial that ends in mid-November 2026, so the link may be offline. The screenshots below show the running app, and the section "Rebuilding the project" explains how to recreate it.
 
 ![Azure Academy dashboard](Screenshots/Dashboard.png)
 
@@ -69,8 +70,6 @@ Cosmos DB record
 ![A progress record in Cosmos DB](Screenshots/cosmos-item.png)
 
 
-
-
 ## Reliability and governance
 
 - **Backups:** Cosmos DB uses continuous backup (7-day retention) for point-in-time restore.
@@ -122,6 +121,16 @@ A second workflow runs `az deployment group what-if`, which compares the Bicep f
 - **Browser-first progress.** Progress works without an account and syncs to the cloud after sign-in. If a signed-in account already has cloud progress, that copy wins over the one in the browser.
 - **Describe, don't deploy.** The Bicep file is checked but not deployed, as explained above.
 - **Security headers.** The Content-Security-Policy restricts scripts to the site's own files and limits fonts and network requests to known origins. Styles still allow `'unsafe-inline'`, because some elements get their colors from data through inline style attributes. A planned cleanup would move those into CSS classes so the policy can drop it.
+
+## Rebuilding the project
+The code and the infrastructure description live in this repository, so the project can be recreated on any Azure subscription in roughly an hour:
+
+1. **Resource group:** create `rg-azure-academy` in a region that allows Static Web Apps (for example East US 2).
+2. **Static Web App (Free plan):** connect it to this repository, branch `main`, with app location `app` and API location `api`. Azure generates a new deployment token and workflow, so update the secret name referenced in `.github/workflows/azure-static-web-apps-*.yml` to match the new one.
+3. **Cosmos DB for NoSQL:** create an account with the free tier applied and provisioned throughput, then a database `academy` and a container `progress` with partition key `/userId` at 400 RU/s. [`infra/main.bicep`](infra/main.bicep) lists the settings to use.
+4. **Connect the two:** add the Cosmos DB connection string to the Static Web App as the application setting `COSMOS_CONNECTION_STRING`. It is never stored in the repository.
+5. **Sign-in** with GitHub and Microsoft works out of the box. The optional extras (tags, delete lock, budget alert, the OIDC what-if workflow with its federated credential, custom role and four GitHub secrets) are described in the sections above.
+
 ## Tech stack
 
 - HTML, CSS and vanilla JavaScript on the front end, with no framework or build step
