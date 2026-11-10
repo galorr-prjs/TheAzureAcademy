@@ -62,7 +62,11 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 - **Security headers:** a Content-Security-Policy restricts scripts to the site's own files and limits fonts and network requests to known origins. The site also sends X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy and Strict-Transport-Security. The changes were tested on a pull request preview before going live.
 - 
 ![A progress record in Cosmos DB](Screenshots/cosmos-item.png)
-![Security headers scan](Screenshots/security-headers.png)
+
+| Security headers PowerShell scan | Security headers A+ grade|
+|---|---|
+| ![PowerShell scan](Screenshots/security-headersPS.png) | ![securityheaders.com scan](Screenshots/security-headers.png) |
+
 
 ## Reliability and governance
 
