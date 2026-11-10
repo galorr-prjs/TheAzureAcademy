@@ -60,10 +60,9 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 - The database connection string lives in the Static Web App's **application settings**, never in the repository.
 - The CI pipeline signs in to Azure with **OIDC**, so no Azure password or secret is stored in GitHub (details below).
 - **Security headers:** a Content-Security-Policy restricts scripts to the site's own files and limits fonts and network requests to known origins. The site also sends X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy and Strict-Transport-Security. The changes were tested on a pull request preview before going live.
-
-![Security headers scan](Screenshots/security-headers.png)
-*Response headers returned by the deployed site.*
+- 
 ![A progress record in Cosmos DB](Screenshots/cosmos-item.png)
+![Security headers scan](Screenshots/security-headers.png)
 
 ## Reliability and governance
 
