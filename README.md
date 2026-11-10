@@ -1,4 +1,4 @@
-\# Azure Academy
+# Azure Academy
 
 An interactive learning platform for Azure, built from scratch and hosted on Azure. Lessons are laid out like an architecture diagram: every lesson is a resource you "deploy", and finishing a path completes the whole architecture.
 
@@ -61,8 +61,15 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 - The CI pipeline signs in to Azure with **OIDC**, so no Azure password or secret is stored in GitHub (details below).
 - **Security headers:** a Content-Security-Policy restricts scripts to the site's own files and limits fonts and network requests to known origins. The site also sends X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy and Strict-Transport-Security. The changes were tested on a pull request preview before going live.
 
-![Security headers scan](Screenshots/security-headers.png)
+| Security headers PowerShell scan | Security headers A+ grade|
+|---|---|
+| ![PowerShell scan](Screenshots/Powershell-SecurityHeaders.png) | ![securityheaders.com scan](Screenshots/security-headers.png) |
+
+Cosmos DB record
 ![A progress record in Cosmos DB](Screenshots/cosmos-item.png)
+
+
+
 
 ## Reliability and governance
 
@@ -75,6 +82,7 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 | Delete lock | Policy blocking a disallowed region |
 |---|---|
 | ![Resource lock](Screenshots/resource-lock.png) | ![Policy blocking a deployment](Screenshots/policy-blocked.png) |
+
 ## Hands-on: access control with Entra ID
 
 To practice Microsoft Entra ID outside the app, I created a test user and gave it the built-in **Reader** role on the project's resource group, so it can view the resources but not change them. It's a small example of least privilege, and of the difference between authentication (the user exists) and authorization (what the user can do).
