@@ -76,7 +76,17 @@ Cosmos DB record
 - **Delete lock:** the resource group has a "Can't delete" lock, so the database can't be removed by accident.
 - **Tags:** resources are tagged `project=azure-academy` and `environment=learning`, so costs can be filtered by project.
 - **Policy:** I practiced Azure Policy in a separate sandbox resource group, with a built-in "Allowed locations" policy that blocks resources outside one region.
-- **Advisor:** I reviewed the recommendations and weighed the cost of each one before acting. For example, I checked which continuous backup tier is free before switching.
+- **Defender for Cloud and Advisor:** I reviewed Advisor's recommendations and weighed the cost of each before acting. In Defender for Cloud, I kept only the free Foundational CSPM plan on and every paid plan off.
+
+| Defender for Cloud plans | Advisor overview |
+|---|---|
+| ![Defender plans](Screenshots/defender-plans.png) | ![Advisor overview](Screenshots/advisor.png) |
+
+![Advisor reliability recommendations](Screenshots/advisor-recommendation.png)
+*Advisor had suggested continuous backup for Cosmos DB. I compared the 7-day and 30-day tiers (only the 7-day tier has no backup storage charge), switched, and the Reliability category now  shows no active recommendations.*
+
+//![Cost analysis](Screenshots/cost-analysis.png)
+//*Cost analysis for the project: free tier and Free plan services, no charges.*
 
 | Delete lock | Policy blocking a disallowed region |
 |---|---|
