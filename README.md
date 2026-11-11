@@ -64,7 +64,7 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 
 | Security headers PowerShell scan | Security headers A+ grade|
 |---|---|
-| ![PowerShell scan](Screenshots/Powershell-SecurityHeaders.png) | ![securityheaders.com scan](Screenshots/security-headers.png) |
+| ![PowerShell scan](Screenshots/security-headers-powershell.png) | ![securityheaders.com scan](Screenshots/security-headers.png) |
 
 Cosmos DB record
 ![A progress record in Cosmos DB](Screenshots/cosmos-item.png)
