@@ -45,6 +45,7 @@ flowchart LR
 | Microsoft Entra ID | Built-in sign-in for learners, and a workload identity for the CI pipeline | Included |
 | Azure Policy, resource locks, tags | Governance and protection against accidental deletion | No charge |
 | Azure Advisor | Reviewing recommendations | Free |
+| Microsoft Defender for Cloud (free tier) | Security posture review, with only the free Foundational CSPM plan on | Free |
 | Azure Cost Management | Budget alert to catch unexpected spending | Free |
 | GitHub Actions | Deployment, validation and what-if checks | Free |
 
@@ -68,6 +69,7 @@ Everything is deliberately kept inside free allowances, with a budget alert in A
 
 Cosmos DB record
 ![A progress record in Cosmos DB](Screenshots/cosmos-item.png)
+*One learner's record: an anonymous ID and the progress data, with no name or email.*
 
 
 ## Reliability and governance
@@ -78,19 +80,19 @@ Cosmos DB record
 - **Policy:** I practiced Azure Policy in a separate sandbox resource group, with a built-in "Allowed locations" policy that blocks resources outside one region.
 - **Defender for Cloud and Advisor:** I reviewed Advisor's recommendations and weighed the cost of each before acting. In Defender for Cloud, I kept only the free Foundational CSPM plan on and every paid plan off.
 
+| Delete lock | Policy blocking a disallowed region |
+|---|---|
+| ![Resource lock](Screenshots/resource-lock.png) | ![Policy blocking a deployment](Screenshots/policy-blocked.png) |
+
 | Defender for Cloud plans | Advisor overview |
 |---|---|
 | ![Defender plans](Screenshots/defender-plans.png) | ![Advisor overview](Screenshots/advisor.png) |
 
 ![Advisor reliability recommendations](Screenshots/advisor-recommendation.png)
-*Advisor had suggested continuous backup for Cosmos DB. I compared the 7-day and 30-day tiers (only the 7-day tier has no backup storage charge), switched, and the Reliability category now  shows no active recommendations.*
+*Advisor had suggested continuous backup for Cosmos DB. I compared the 7-day and 30-day tiers (only the 7-day tier has no backup storage charge), switched, and the Reliability category now shows no active recommendations.*
 
-//![Cost analysis](Screenshots/cost-analysis.png)
-//*Cost analysis for the project: free tier and Free plan services, no charges.*
-
-| Delete lock | Policy blocking a disallowed region |
-|---|---|
-| ![Resource lock](Screenshots/resource-lock.png) | ![Policy blocking a deployment](Screenshots/policy-blocked.png) |
+![Cost analysis](Screenshots/cost-analysis.png)
+*Cost analysis for the project: free tier and Free plan services, no charges.*
 
 ## Hands-on: access control with Entra ID
 
@@ -130,7 +132,7 @@ A second workflow runs `az deployment group what-if`, which compares the Bicep f
 - **Managed API.** Static Web Apps' managed Functions keep deployment simple and free. The trade-off is that they only respond to web requests, and I have found no way to give them a managed identity on the Free plan, so the database connection uses a connection string stored in app settings.
 - **Browser-first progress.** Progress works without an account and syncs to the cloud after sign-in. If a signed-in account already has cloud progress, that copy wins over the one in the browser.
 - **Describe, don't deploy.** The Bicep file is checked but not deployed, as explained above.
-- **Security headers.** The Content-Security-Policy restricts scripts to the site's own files and limits fonts and network requests to known origins. Styles still allow `'unsafe-inline'`, because some elements get their colors from data through inline style attributes. A planned cleanup would move those into CSS classes so the policy can drop it.
+- **Security headers.** Styles still allow `'unsafe-inline'`, because some elements get their colors from data through inline style attributes. A planned cleanup would move those into CSS classes so the policy can drop it.
 
 ## Rebuilding the project
 The code and the infrastructure description live in this repository, so the project can be recreated on any Azure subscription in roughly an hour:
